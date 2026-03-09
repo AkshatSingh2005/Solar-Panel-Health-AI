@@ -1,4 +1,5 @@
 import cv2
+from matplotlib.pyplot import gray
 import numpy as np
 
 
@@ -14,13 +15,23 @@ def extract_features(image_path):
     temp_variance = np.var(gray)
 
     # hotspot detection
-    _, thresh = cv2.threshold(gray, 200, 255, cv2.THRESH_BINARY)
+    # detect local thermal anomalies using blur difference
+    blur = cv2.GaussianBlur(gray, (21, 21), 0)
+
+    diff = cv2.absdiff(gray, blur)
+
+    _, thresh = cv2.threshold(diff, 25, 255, cv2.THRESH_BINARY)
 
     contours, _ = cv2.findContours(
         thresh,
         cv2.RETR_EXTERNAL,
         cv2.CHAIN_APPROX_SIMPLE
     )
+
+    image_area = gray.shape[0] * gray.shape[1]
+    min_area = 0.001 * image_area
+
+    contours = [c for c in contours if cv2.contourArea(c) > min_area]
 
     hotspot_count = len(contours)
 
