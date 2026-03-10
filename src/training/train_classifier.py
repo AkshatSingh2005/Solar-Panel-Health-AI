@@ -1,6 +1,7 @@
 import sys
 import os
 
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 import torch
 import torch.nn as nn
@@ -51,6 +52,9 @@ def main():
 
         print(f"Epoch {epoch+1}/{epochs} Loss: {running_loss:.4f}")
 
-
+    print("akshat")
+    torch.save(model.state_dict(), "model.pth")
+    print("Model saved")
+    
 if __name__ == "__main__":
     main()
