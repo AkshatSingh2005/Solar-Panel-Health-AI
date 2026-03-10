@@ -6,6 +6,10 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 import torch
 import numpy as np
 
+from utils.logger import get_logger
+
+logger = get_logger()
+
 from sklearn.metrics import (
     accuracy_score,
     precision_score,
@@ -27,7 +31,7 @@ def evaluate():
 
     model = get_model(12)
 
-    model.load_state_dict(torch.load("best_model.pth", map_location=device))
+    model.load_state_dict(torch.load("model.pth", map_location=device))
 
     model.to(device)
 
@@ -65,6 +69,13 @@ def evaluate():
     print("Recall:", recall)
     print("F1 Score:", f1)
 
+    logger.info("Starting evaluation")
+
+    logger.info(f"Accuracy: {acc}")
+    logger.info(f"Precision: {precision}")
+    logger.info(f"Recall: {recall}")
+    logger.info(f"F1 Score: {f1}")
+
     print("\nClassification Report")
     print("----------------")
 
@@ -74,6 +85,8 @@ def evaluate():
     print("----------------")
 
     print(confusion_matrix(all_labels, all_preds))
+
+    logger.info(f"Confusion Matrix:\n{confusion_matrix(all_labels, all_preds)}")
 
 
 if __name__ == "__main__":

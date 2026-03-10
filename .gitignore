@@ -5,3 +5,5 @@ data/raw/
 outputs/
 *.pyc
 .DS_Store
+personal_notes.txt
+experiment/experiment_logs/
